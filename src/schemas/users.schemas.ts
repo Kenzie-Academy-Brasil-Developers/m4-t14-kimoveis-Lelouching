@@ -10,6 +10,8 @@ export const userCreateSchema = z.object({
     admin: z.boolean().default(false)
 })
 
+export const userUpdateSchema = userCreateSchema.omit({ admin: true }).partial()
+
 export const userInfoSchema = userCreateSchema.extend({
     id: z.number(),
     createdAt: z.date(),
