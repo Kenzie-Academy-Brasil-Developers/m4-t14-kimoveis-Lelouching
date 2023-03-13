@@ -12,7 +12,7 @@ export const createRealEstateController = async (req: Request, res: Response): P
     const category: Category = req.category
     
     const address: Address = await createAddressService(realEstateBody.address)
-    const realEstate: any = await createRealEstateService({ size, value }, address, category)
+    const realEstate: RealEstate = await createRealEstateService({ size, value }, address, category)
 
     return res.status(201).json(realEstate)
 }
