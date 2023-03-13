@@ -1,10 +1,12 @@
-import { iUserInfo } from "./../../interfaces/users.interfaces"
+import { Category } from "../../entities"
+import { iUser } from "../../interfaces/users.interfaces"
 
 declare global{
     namespace Express{
         interface Request{
-            userToken: iUserInfo,
-            userId: iUserInfo
+            userToken: iUser,
+            userId: iUser,
+            category: Category
         }
     }
 }

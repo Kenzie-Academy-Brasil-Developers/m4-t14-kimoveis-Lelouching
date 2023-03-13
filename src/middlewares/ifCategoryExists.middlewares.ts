@@ -7,7 +7,7 @@ export const ifCategoryExists = async (req: Request, res: Response, next: NextFu
 
     if(category){
         return res.status(409).json({
-            message: "Category already exists!"
+            message: "Category already exists"
         })
     }
 

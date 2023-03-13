@@ -5,8 +5,7 @@ import { User } from "../../entities"
 export const deleteUserService = async (userid: number): Promise<void> => {
     const userRepo: Repository<User> = AppDataSource.getRepository(User)
 
-    await userRepo.createQueryBuilder().
-    softDelete().
-    where("id = :id", { id: userid }).
-    execute()
+    await userRepo.softDelete({
+        id: userid
+    })
 }

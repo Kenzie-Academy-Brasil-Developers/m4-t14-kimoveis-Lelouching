@@ -5,11 +5,9 @@ import { Category } from "../../entities"
 export const createCategoryService = async (categoryName: string): Promise<Category> => {
     const categoryRepo: Repository<Category> = AppDataSource.getRepository(Category)
 
-    const category: InsertResult = await categoryRepo.createQueryBuilder().
-    insert().
-    values({ name: categoryName }).
-    returning("*").
-    execute()
+    const category: Category = categoryRepo.create({ name: categoryName })
 
-    return category.raw[0]
+    await categoryRepo.save(category)
+
+    return category
 }

@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Schedule } from "./schedulesUsersProperties.entities"
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Address } from "./adresses.entities";
 import { Category } from "./categories.entities";
 
@@ -11,16 +12,16 @@ export class RealEstate{
     sold: boolean
 
     @Column({ type: "decimal", precision: 12, scale: 2 })
-    value: number
+    value: string | number
 
     @Column({ type: "integer" })
     size: number
 
-    @CreateDateColumn()
-    createdAt: Date | string
+    @CreateDateColumn({ type: "date" })
+    createdAt: string
 
-    @UpdateDateColumn()
-    updatedAt: Date | string
+    @UpdateDateColumn({ type: "date" })
+    updatedAt: string
 
     @OneToOne(() => Address)
     @JoinColumn()

@@ -1,3 +1,4 @@
+import "dotenv/config"
 import { AppDataSource } from "./../../data-source"
 import { sign } from "jsonwebtoken"
 import { Repository } from "typeorm"
@@ -9,34 +10,31 @@ import { compare } from "bcryptjs"
 export const loginUserService = async (userLogin: iUserLogin): Promise<string> => {
     const userRepo: Repository<User> = AppDataSource.getRepository(User)
 
-    const user: User | null = await userRepo.createQueryBuilder().
-    select().
-    where("LOWER(email) = :email", { email: userLogin.email.toLowerCase() }).
-    withDeleted().
-    getOne()
+    const user: User | null = await userRepo.findOneBy({
+        email: userLogin.email
+    })
 
     if(!user){
-        throw new AppError("Email or password invalid!", 401)
-    }
-
-    if(user.deletedAt){
-        throw new AppError("Your account is disabled!", 403)
+        throw new AppError("Invalid credentials", 401)
     }
 
     const comparePassword: boolean = await compare(userLogin.password, user.password)
     
     if(!comparePassword){
-        throw new AppError("Email or password invalid!", 401)
+        throw new AppError("Invalid credentials", 401)
     }
 
     const token: string = sign(
         {
-            email: userLogin.email
+            id: user.id,
+            email: user.email,
+            admin: user.admin,
+            deletedAt: user.deletedAt
         },
         String(process.env.SECRET_KEY),
         {
             expiresIn: "24h",
-            subject: String(user?.id)
+            subject: String(user.id)
         }
     )
 

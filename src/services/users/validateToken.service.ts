@@ -1,15 +1,12 @@
+import { iUser } from "./../../interfaces/users.interfaces"
+import "dotenv/config"
 import { verify } from "jsonwebtoken"
-import { Repository } from "typeorm"
-import { AppDataSource } from "../../data-source"
-import { User } from "../../entities"
 import { AppError } from "../../errors"
-import { userInfoSchema } from "../../schemas/users.schemas"
-import { iUserInfo } from "../../interfaces/users.interfaces"
 
-export const validateTokenService = async (authToken: string): Promise<iUserInfo> => {
+export const validateTokenService = async (authToken: string): Promise<iUser> => {
     const token: string = authToken.split(" ")[1]
 
-    const userValidated: iUserInfo[] = []
+    let userValidated: iUser| null = null
 
     await verify(
         token,
@@ -19,18 +16,14 @@ export const validateTokenService = async (authToken: string): Promise<iUserInfo
                 throw new AppError(error.message, 401)
             }
 
-            const userRepo: Repository<User> = AppDataSource.getRepository(User)
-
-            const user: User | null = await userRepo.createQueryBuilder().
-            select().
-            where("LOWER(email) = :email", { email: decoded.email }).
-            getOne()
-
-            if(!user) return
-
-            userValidated.push(await userInfoSchema.parse(user))
+            userValidated = {
+                id: decoded.id,
+                email: decoded.email,
+                admin: decoded.admin,
+                deletedAt: decoded.deletedAt
+            }
         }
     )
 
-    return userValidated[0]
+    return userValidated!
 }

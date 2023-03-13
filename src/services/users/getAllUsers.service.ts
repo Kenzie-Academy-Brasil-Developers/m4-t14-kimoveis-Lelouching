@@ -7,10 +7,9 @@ import { userInfoArraySchema } from "../../schemas/users.schemas";
 export const getAllUsersService = async (): Promise<iUserInfo[]> => {
     const userRepo: Repository<User> = AppDataSource.getRepository(User)
 
-    const users: User[] = await userRepo.createQueryBuilder().
-    select().
-    withDeleted().
-    getMany()
+    const users: User[] = await userRepo.find({
+        withDeleted: true
+    })
 
     return userInfoArraySchema.parse(users)
 }

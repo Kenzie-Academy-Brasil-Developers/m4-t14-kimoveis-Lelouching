@@ -1,3 +1,4 @@
+import { Schedule } from "./schedulesUsersProperties.entities"
 import { RealEstate } from "./realEstate.entities"
 import { Address } from "./adresses.entities"
 import { Category } from "./categories.entities"
@@ -7,5 +8,6 @@ export {
     User,
     Category,
     Address,
-    RealEstate
+    RealEstate,
+    Schedule
 }

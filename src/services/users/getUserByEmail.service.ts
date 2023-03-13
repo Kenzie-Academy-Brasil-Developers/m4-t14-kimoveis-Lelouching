@@ -10,7 +10,7 @@ export const getUserByEmailService = async (email: string): Promise<null | iUser
     const user: User | null = await userRepo.createQueryBuilder().
     select().
     withDeleted().
-    where("LOWER(email) = :email", { email: email.toLowerCase() }).
+    where("email = :email", { email: email }).
     getOne()
 
     return await userInfoSchema.nullable().parse(user)
