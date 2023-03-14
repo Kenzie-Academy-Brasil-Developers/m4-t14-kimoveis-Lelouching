@@ -25,23 +25,25 @@ export const getAllSchedulesFromARealEstateService = async (realEstateId: number
         throw new AppError("RealEstate not found", 404)
     }
 
-    const schedule = await scheduleRepo.createQueryBuilder("schedules_users_properties").
-    select(["schedules_users_properties", "users"]).
-    innerJoin("schedules_users_properties.user", "users").
-    where("schedules_users_properties.realEstateId = :id", { id: realEstateId }).
-    getMany()
+    // const schedule = await scheduleRepo.createQueryBuilder("schedules_users_properties").
+    // select(["schedules_users_properties", "users"]).
+    // innerJoin("schedules_users_properties.user", "users").
+    // where("schedules_users_properties.realEstateId = :id", { id: realEstate.id }).
+    // getMany()
 
-    // .find({
-    //     relations: {
-    //         user: true
-    //     },
-    //     where: {
-    //         realEstate: true
-    //     }
-    // })
+    const schedule = await scheduleRepo.find({
+        where: {
+            realEstate: {
+                id: realEstate.id
+            }
+        },
+        relations: {
+            user: true
+        }
+    })
 
     return {
         ...realEstate,
-        schedules: scheduleUserArray.parse(schedule)
+        schedules: schedule
     }
 }

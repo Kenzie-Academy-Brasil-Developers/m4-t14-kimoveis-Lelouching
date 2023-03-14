@@ -36,7 +36,9 @@ export const createScheduleService = async (requestBody: iScheduleCreate, user: 
         id: user.id
     })
 
-    const schedule: Schedule = repoSchedule.create({...requestBody, user: userSchedule!})
+    const { date, hour } = requestBody
+
+    const schedule: Schedule = repoSchedule.create({date: date, hour: hour, realEstate: ifRealEstateExists, user: userSchedule!})
 
     const verifyIfScheduleAlreadyExists: Schedule | null = await repoSchedule.createQueryBuilder("schedule").
     where("schedule.userId = :id", { id: userSchedule?.id }).

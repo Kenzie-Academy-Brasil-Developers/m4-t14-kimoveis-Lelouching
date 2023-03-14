@@ -1,5 +1,5 @@
-import { iUser } from "./../../interfaces/users.interfaces"
 import "dotenv/config"
+import { iUser } from "./../../interfaces/users.interfaces"
 import { verify } from "jsonwebtoken"
 import { AppError } from "../../errors"
 
