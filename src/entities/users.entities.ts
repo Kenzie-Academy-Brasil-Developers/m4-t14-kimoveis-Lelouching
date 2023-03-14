@@ -29,7 +29,7 @@ export class User {
 
     @BeforeInsert()
     @BeforeUpdate()
-    hashPassword = () => {
+    hashPassword(){
         this.password = hashSync(this.password, 10)
     }
 }
