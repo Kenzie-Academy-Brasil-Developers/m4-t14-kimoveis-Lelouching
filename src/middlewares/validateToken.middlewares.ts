@@ -1,7 +1,6 @@
-import { User } from "./../entities/users.entities"
-import { validateTokenService } from "../services/users/validateToken.service"
-import { NextFunction, Request, Response } from "express";
-import { iUser, iUserInfo } from "../interfaces/users.interfaces";
+import "dotenv/config"
+import { verify } from "jsonwebtoken"
+import { NextFunction, Request, Response } from "express"
 
 export const validateToken = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
     if(!req.headers.authorization){
@@ -10,9 +9,26 @@ export const validateToken = async (req: Request, res: Response, next: NextFunct
         })
     }
 
-    const user: iUser = await validateTokenService(req.headers.authorization)
+    const token: string = req.headers.authorization.split(" ")[1]
 
-    req.userToken = user
+    await verify(
+        token,
+        String(process.env.SECRET_KEY),
+        async (error: any, decoded: any): Promise<void | Response> => {
+            if(error) {
+                return res.status(401).json({ 
+                    message: error.message 
+                })
+            }
+
+            req.userToken = {
+                id: decoded.id,
+                email: decoded.email,
+                admin: decoded.admin,
+                deletedAt: decoded.deletedAt
+            }
+        }
+    )
 
     return next()
 }
