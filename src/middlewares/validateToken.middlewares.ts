@@ -22,7 +22,7 @@ export const validateToken = async (req: Request, res: Response, next: NextFunct
             }
 
             req.userToken = {
-                id: decoded.id,
+                id: Number(decoded.sub),
                 email: decoded.email,
                 admin: decoded.admin,
                 deletedAt: decoded.deletedAt
